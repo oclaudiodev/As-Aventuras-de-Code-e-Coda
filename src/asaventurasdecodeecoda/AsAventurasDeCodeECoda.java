@@ -8,8 +8,7 @@ import java.util.Random;
 import java.util.Scanner;
 
 public class AsAventurasDeCodeECoda {
-
-     public static void main(String[] args) {
+    public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
         int opcaoInicioJogo = menuPrincipal(input);
 
@@ -21,13 +20,22 @@ public class AsAventurasDeCodeECoda {
         String [][] tabuleiroFantasma = new String[7][7];
         preencherMatrizFantasma(tabuleiroFantasma);
 
-        switch (opcaoInicioJogo){
-            case 1:
-                jogo(tabuleiroFantasma,tabuleiroDoJogo,input);
-                break;
-            case 2:
-                //Caso o jogador saia do jogo
-                System.out.println("Saindo do jogo...");
+        while(opcaoInicioJogo != 3){
+            switch (opcaoInicioJogo){
+                case 1:
+                    jogo(tabuleiroFantasma,tabuleiroDoJogo,input);
+                    opcaoInicioJogo=menuPrincipal(input);
+                    break;
+                case 2:
+                    //instrucoes para o jogo
+                    intrucoesDoJogo();
+                    opcaoInicioJogo=menuPrincipal(input);
+                    break;
+                case 3:
+                    //sair do jogo
+                    System.out.println("Saindo do jogo...");
+                    break;
+            }
         }
     }
 
@@ -75,16 +83,26 @@ public class AsAventurasDeCodeECoda {
     public static int menuPrincipal(Scanner sc){
         System.out.println("---- Menu Principal ----");
         System.out.println("(1) Iniciar Jogo");
-        System.out.println("(2) Sair do jogo");
+        System.out.println("(2) Instrucoes do jogo");
+        System.out.println("(3) Sair do jogo");
         int opcao = 0;
         do{
             System.out.println("Digite a opcao");
             opcao = sc.nextInt();
-            if(opcao < 1 || opcao > 2){
+            if(opcao < 1 || opcao > 3){
                 System.out.println("Digite uma opcao valida....");
             }
-        }while(opcao < 1 || opcao > 2);
+        }while(opcao < 1 || opcao > 3);
         return opcao;
+    }
+
+    //Instrucoes do jogo
+    public static void intrucoesDoJogo(){
+        System.out.println("--- Instrucoes do jogo ---");
+        System.out.println("O jogador tera como objetivo encontrar e derrotar os 7 bosses no mapa, cada boss ira dropar sua reliquia");
+        System.out.println("quando o jogador tiver obtido todas as 7 reliquias ele ira conseguir escapar do labiritinto.");
+        System.out.println("Para auxiliar o jogador temos charadas e caixas com itens especiaias no jogo.");
+        System.out.println("W/A/S/D e os botoes uados para se movimentar pelo mapa.");
     }
 
     //Escolha do personagem
@@ -213,17 +231,124 @@ public class AsAventurasDeCodeECoda {
             }
         }
     }
-    
+    //criar bolsa de reliquias do jogador
+    public static String[] criarBolsaDasReliquias(){
+        String[] vetorDaBolsa = new String[7];
+        for (int i=0;i<vetorDaBolsa.length;i++){
+            vetorDaBolsa[i] = "[VAZIO]";
+        }
+        return vetorDaBolsa;
+    }
+
+    //mostrar Bolsa de reliquias para o usuario
+    public static void listarBolsaDeReliquias(String[] bolsa){
+        for (int i=0;i<bolsa.length;i++){
+            System.out.print(bolsa[i]);
+        }
+        System.out.println(" ");
+    }
+    //Criar estastisticas do jogador
+    public static int[] criarestatisticasDoJogador(){
+        Random rdm = new Random();
+        System.out.println("--- Criando estatisticas do Jogador ---");
+        int vida = rdm.nextInt(50,80);
+        int dano = rdm.nextInt(10,18);
+        int velocidade = rdm.nextInt(1,8);
+        int[] statusJogador = {vida,dano,velocidade};
+        return statusJogador;
+    }
+    //status do jogador
+    public static void listarStatusJogador(int [] status){
+        System.out.println("-----------------------------------");
+        System.out.println("Vida: "+status[0]);
+        System.out.println("Dano: "+status[1]);
+        System.out.println("Velocidade: "+status[2]);
+    }
+
+    //fundir as reliquias do jogador
+    public static boolean fundirReliquias(String[] reliquias){
+        int c = 0;
+        boolean valid = true;
+        for(int i=0;i<reliquias.length;i++){
+            if(reliquias[i].equals("[VAZIO]")){
+                c++;
+            }
+        }
+        if(c > 0){
+            System.out.println("Você ainda nao tem todas as reliquias necessarias...");
+            System.out.println("Faltam: "+c);
+        }
+        if(c == 0){
+            System.out.println("Parabens Jogador voce obteve todas as reliquias necessarias para completar o jogo");
+            System.out.println("Esperamos que tenha gostado da jornada....");
+            valid = false;
+        }
+        return valid;
+    }
+
+    //menu de escolhas do jogadors
+    public static int menuDeEscolhasJogador(Scanner sc){
+        System.out.println("---- Menu de escolhas ----");
+        System.out.println("1 - Se movimentar");
+        System.out.println("2 - ver mapa");
+        System.out.println("3 - verificar bolsa se reliquias");
+        System.out.println("4 - verificar status do jogador");
+        System.out.println("5 - Fundir todas reliquias (Necessario ter as 7)");
+        System.out.println("6 - Sair do jogo");
+        int opcaoJogador = sc.nextInt();
+        return opcaoJogador;
+    }
+
     //O jogo rodara nessa funcao
     public static void jogo(String[][] mapaFantasma,String[][] mapaJogo,Scanner sc){
         //Todas funcoes do jogo deve ser colocada aqui
         //Decisao do personagem
         String personagem = escolhaDePersonagem(sc);
+
         //spawn personagem
         spawnJogador(personagem,mapaJogo);
+
         //listar mapa para o usuario
         listarMapaJogo(mapaJogo);
-        //movimentacao do jogador
-        acaoDeMovimentar(mapaJogo,mapaFantasma,sc);
+
+        //criar bolsa de reliquias do jogador
+        String [] bolsaDeReliquia = criarBolsaDasReliquias();
+
+        //Criar status do jogador
+        int[] statusJogador = criarestatisticasDoJogador();
+
+        //criar bosses do jogo
+
+        //criar charadas
+
+        
+        boolean finalizarJogo = true;
+        while(finalizarJogo) {
+            int menuDeEscolhas = menuDeEscolhasJogador(sc);
+            switch (menuDeEscolhas){
+                case 1:
+                    //movimentacao do jogador
+                    acaoDeMovimentar(mapaJogo, mapaFantasma, sc);
+                    break;
+                case 2:
+                    listarMapaJogo(mapaJogo);
+                    break;
+                case 3:
+                    listarBolsaDeReliquias(bolsaDeReliquia);
+                    break;
+                case 4:
+                    listarStatusJogador(statusJogador);
+                    break;
+                case 5:
+                    finalizarJogo=fundirReliquias(bolsaDeReliquia);
+                    break;
+                case 6:
+                    finalizarJogo = false;
+                    System.out.println("Saindo do jogo...");
+                    break;
+                default:
+                    System.out.println("Opcao Invalida...");
+            }
+        }
     }
 }
