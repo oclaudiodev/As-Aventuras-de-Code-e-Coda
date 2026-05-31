@@ -1,0 +1,23 @@
+[33mcommit 693aec729c6c9851a60a86faf51266aaae71f83b[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m, [m[1;31morigin/master[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: Wellington izaias teixeira <wellingtonizaiasteixeira@gmail.com>
+Date:   Sun May 31 12:12:30 2026 -0300
+
+    Implementado funcao de criacao de reliquias listar reliquias, criar estatisticas e listar estatisticas, fundir as reliquias e validar se estao todas ali ou nao,e criado menu de escolhas do jogador
+
+[33mcommit fd14c85cfcc4631f458e348322316cbf41227109[m
+Author: Wellington izaias teixeira <wellingtonizaiasteixeira@gmail.com>
+Date:   Sun May 31 10:14:19 2026 -0300
+
+    Correção do movimento de personagem e adicionado mudança de casa ao passar por ela
+
+[33mcommit 85882f0a22240dd741c420e718c3f23b7c1549ed[m
+Author: Wellington izaias teixeira <wellingtonizaiasteixeira@gmail.com>
+Date:   Thu May 28 18:35:53 2026 -0300
+
+    sistema de movimentacao,funcao principal do jogo, matriz do jogo,escolha de personagem e menu de inicio pronto
+
+[33mcommit 22c2c5fd47190c4ae1ec3738560aa2ce7ab89d57[m
+Author: oclaudiodev <7claudiosouza@gmail.com>
+Date:   Tue May 26 22:41:51 2026 -0300
+
+    CriandoProjeto

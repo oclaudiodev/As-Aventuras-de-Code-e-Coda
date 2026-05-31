@@ -100,11 +100,19 @@ public class AsAventurasDeCodeECoda {
 
     //Instrucoes do jogo
     public static void intrucoesDoJogo() {
-        System.out.println("--- Instrucoes do jogo ---");
-        System.out.println("O jogador tera como objetivo encontrar e derrotar os 7 bosses no mapa, cada boss ira dropar sua reliquia");
-        System.out.println("quando o jogador tiver obtido todas as 7 reliquias ele ira conseguir escapar do labiritinto.");
-        System.out.println("Para auxiliar o jogador temos charadas e caixas com itens especiaias no jogo.");
-        System.out.println("W/A/S/D e os botoes uados para se movimentar pelo mapa.");
+        System.out.println("--- Instruções do Jogo ---\n" + //
+                        "Objetivo:\n" + //
+                        "Explore o labirinto, encontre e derrote os 7 bosses espalhados pelo mapa. Cada boss derrotado deixa uma relíquia. Colete todas as 7 relíquias e use a opção \"Fundir Relíquias\" para escapar e vencer o jogo.\n" + //
+                        "Movimentação:\n" + //
+                        "Use W/A/S/D para se mover pelo mapa.\n" + //
+                        "W = cima, S = baixo, A = esquerda, D = direita.\n" + //
+                        "Batalha:\n" + //
+                        "Ao entrar na casa de um boss a batalha começa automaticamente. Vencer restaura sua vida e aumenta seu ataque. Perder significa fim de jogo.\n" + //
+                        "Bosses:\n" + //
+                        "Varkhul, Seraphyx, Drogmar, Nytheris, Krazenoth, Velkior e Azhrael. Cada um é mais forte que o anterior, então explore com cuidado.\n" + //
+                        "Menu de opções:\n" + //
+                        "1 - Movimentar, 2 - Ver mapa, 3 - Ver relíquias, 4 - Ver status, 5 - Fundir relíquias, 6 - Sair.\n" + //
+                        "Dica: Derrote os bosses mais fracos primeiro para ficar mais forte antes de enfrentar Azhrael.");
     }
 
     //Escolha do personagem
