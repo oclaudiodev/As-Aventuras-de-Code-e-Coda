@@ -235,9 +235,10 @@ public class AsAventurasDeCodeECoda {
                             return false; // game over
                         }
                         // Adiciona reliquia na bolsa
+                        String reliquia = obterReliquiaDoBoss(casaDestino);
                         for (int k = 0; k < bolsaDeReliquia.length; k++) {
                             if (bolsaDeReliquia[k].equals("[VAZIO]")) {
-                                bolsaDeReliquia[k] = "Reliquia_" + casaDestino;
+                                bolsaDeReliquia[k] = reliquia;
                                 break;
                             }
                         }
@@ -330,6 +331,48 @@ public class AsAventurasDeCodeECoda {
             Thread.sleep(1500);
         } catch (InterruptedException e) {
         }
+    }
+    // Nome de cada reliquia e mensagem de obtenção
+    public static String obterReliquiaDoBoss(String nomeBoss) {
+        String reliquia;
+        String mensagem;
+        switch (nomeBoss) {
+            case "Varkhul":
+                reliquia = "Olhos das Trevas [Varkhul]";
+                mensagem = "Um olho negro pulsa em sua mao...";
+                break;
+            case "Seraphyx":
+                reliquia = "Pena do Abismo [Seraphyx]";
+                mensagem = "Uma pena iridescente flutua suavemente — trofeu da queda de Seraphyx.";
+                break;
+            case "Drogmar":
+                reliquia = "Escudo do Inferno [Drogmar]";
+                mensagem = "Um escudo inquebravel e ainda quente ao toque, arrancado de Drogmar.";
+                break;
+            case "Nytheris":
+                reliquia = "Coração do Vazio [Nytheris]";
+                mensagem = "O coração de Nytheris sente tudo mesmo em sua morte. Um artefato perturbador.";
+                break;
+            case "Krazenoth":
+                reliquia = "Garra da Ruina [Krazenoth]";
+                mensagem = "A garra de Krazenoth ainda irradia poder destruidor. Ela e sua agora.";
+                break;
+            case "Velkior":
+                reliquia = "Coroa Partida [Velkior]";
+                mensagem = "Os fragmentos da coroa de Velkior se fundem em sua mao como um sinal de vitoria.";
+                break;
+            case "Azhrael":
+                reliquia = "Alma Aprisionada [Azhrael]";
+                mensagem = "A essencia de Azhrael fica presa em uma gema — o maior dos trofeus hahahaha.";
+                break;
+            default:
+                reliquia = "Reliquia Desconhecida";
+                mensagem = "Um objeto misterioso cai ao chao...";
+                break;
+        }
+        System.out.println("\n*** " + mensagem + " ***");
+        System.out.println(">> Reliquia obtida: " + reliquia + "\n");
+        return reliquia;
     }
 
     public static boolean trocaInsana(String[][] matrizFantasma, String[][] matrizJogo, String nomeBoss, int[] statusJogador) {
