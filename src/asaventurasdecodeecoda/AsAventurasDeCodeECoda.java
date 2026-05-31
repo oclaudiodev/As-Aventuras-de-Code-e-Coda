@@ -9,7 +9,7 @@ import java.util.Scanner;
 
 public class AsAventurasDeCodeECoda {
 
-  public static void main(String[] args) {
+     public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
         int opcaoInicioJogo = menuPrincipal(input);
 
@@ -17,9 +17,13 @@ public class AsAventurasDeCodeECoda {
         String[][] tabuleiroDoJogo = new String[7][7];
         matrizDoMapaDoJogo(tabuleiroDoJogo);
 
+        //matriz fantasma do jogo
+        String [][] tabuleiroFantasma = new String[7][7];
+        preencherMatrizFantasma(tabuleiroFantasma);
+
         switch (opcaoInicioJogo){
             case 1:
-                jogo(tabuleiroDoJogo,input);
+                jogo(tabuleiroFantasma,tabuleiroDoJogo,input);
                 break;
             case 2:
                 //Caso o jogador saia do jogo
@@ -32,6 +36,37 @@ public class AsAventurasDeCodeECoda {
         for(int i=0;i<matrizMapa.length;i++){
             for(int j=0;j<matrizMapa[i].length;j++){
                 matrizMapa[i][j] = "???";
+            }
+        }
+    }
+
+    //criar matriz fantasma do jogo
+    public static void preencherMatrizFantasma(String [][] matrizFantasma){
+        //bosses
+        matrizFantasma[0][4] ="Varkhul" ;
+        matrizFantasma[1][1] ="Seraphyx" ;
+        matrizFantasma[2][5] = "Drogmar";
+        matrizFantasma[3][2] = "Nytheris" ;
+        matrizFantasma[4][4] = "Krazenoth";
+        matrizFantasma[5][3] = "Velkior";
+        matrizFantasma[6][6] = "Azhrael";
+
+        //charadas tera que criar uma funcao para validar elas e criar
+        matrizFantasma[0][6] = "charada1";
+        matrizFantasma[1][3] = "charada2";
+        matrizFantasma[3][0] = "charada3";
+        matrizFantasma[5][5] = "charada4";
+
+        //Caixa especial
+        matrizFantasma[3][5] = "CaixaEspecial";
+        matrizFantasma[5][0] = "CaixaEspecial2";
+
+        //preenchimento das casas vazias
+        for (int i=0;i<matrizFantasma.length;i++){
+            for (int j=0;j<matrizFantasma[i].length;j++){
+                if(matrizFantasma[i][j] == null){
+                    matrizFantasma[i][j] = "[VAZIA]";
+                }
             }
         }
     }
@@ -80,7 +115,7 @@ public class AsAventurasDeCodeECoda {
     //aleatorizar Spawn do jogador
     public static void spawnJogador(String nomePersonagem,String[][] matrizJogo){
         Random aleatorizar = new Random();
-        int linha = aleatorizar.nextInt(1,7);
+        int linha = aleatorizar.nextInt(7);
         matrizJogo[linha][0] = "⚔⚔⚔";
     }
 
@@ -110,75 +145,77 @@ public class AsAventurasDeCodeECoda {
     }
 
     //validar movimentacao e direcao que o jogador ira, para saber se batera na parede por exemplo
-    public static int[] validDirecaoJogador(String[][] matrizJogo, char direcao, int coluna,int linha){
+    public static int[] validDirecaoJogador(String[][] matrizJogo, char direcao, int coluna,int linha,Scanner sc){
         int[] direcaoValidada = new int[2];
-        boolean valid = true;
-        while (valid) {
             if (direcao == 'w') {
-                if (linha-1 > matrizJogo.length) {
+                if (linha-1 < 0) {
                     System.out.println("Nao existe nada para la, va explore outro lugar...");
+                    return validDirecaoJogador(matrizJogo,receberDirecaoDoJogador(sc),coluna,linha,sc);
                 } else {
                     linha--;
                     direcaoValidada[0] = linha;
                     direcaoValidada[1] = coluna;
-                    valid = false;
                 }
             } else if (direcao == 'a') {
-                if (coluna-1 > matrizJogo.length) {
+                if (coluna-1 < 0) {
                     System.out.println("Nao existe nada para la, va explore outro lugar...");
+                    return validDirecaoJogador(matrizJogo,receberDirecaoDoJogador(sc),coluna,linha,sc);
                 } else {
                     coluna--;
                     direcaoValidada[0] = linha;
                     direcaoValidada[1] = coluna;
-                    valid = false;
                 }
             } else if (direcao == 's') {
-                if (linha+1 < matrizJogo.length) {
+                if (linha+1 >= matrizJogo.length) {
                     System.out.println("Nao existe nada para la, va explore outro lugar...");
+                    return validDirecaoJogador(matrizJogo,receberDirecaoDoJogador(sc),coluna,linha,sc);
                 } else {
                     linha++;
                     direcaoValidada[0] = linha;
                     direcaoValidada[1] = coluna;
-                    valid = false;
                 }
             } else if (direcao == 'd') {
-                if (coluna+1 > matrizJogo.length) {
+                if (coluna+1 >= matrizJogo[0].length) {
                     System.out.println("Nao existe nada para la, va explore outro lugar...");
+                    return validDirecaoJogador(matrizJogo,receberDirecaoDoJogador(sc),coluna,linha,sc);
                 } else {
                     coluna++;
                     direcaoValidada[0] = linha;
                     direcaoValidada[1] = coluna;
-                    valid = false;
                 }
             }
-        }
         return direcaoValidada;
     }
 
     //Sistema de movimentacao
-    public static void acaoDeMovimentar(String[][] matrizJogo,Scanner sc){
+    public static void acaoDeMovimentar(String[][] matrizJogo,String[][] matrizFantasma,Scanner sc){
         boolean valid = true;
         char direcaoJogador = receberDirecaoDoJogador(sc);
         int locJogadorLinha,locJogadorColuna;
-        do{
+        while (valid){
             for(int i=0;i<matrizJogo.length;i++){
                 for(int j=0;j<matrizJogo[i].length;j++){
                     if(matrizJogo[i][j].equals("⚔⚔⚔")){
                         locJogadorLinha = i;
                         locJogadorColuna = j;
-                        int[] locNovaJogador = validDirecaoJogador(matrizJogo,direcaoJogador,locJogadorColuna,locJogadorLinha);
+                        int[] locNovaJogador = validDirecaoJogador(matrizJogo,direcaoJogador,locJogadorColuna,locJogadorLinha, sc);
                         String temp = matrizJogo[i][j];
                         matrizJogo[locNovaJogador[0]][locNovaJogador[1]]=temp;
+                        matrizJogo[i][j] = matrizFantasma[i][j];
                         listarMapaJogo(matrizJogo);
                         valid = false;
+                        break;
                     }
                 }
+                if (!valid){
+                    break;
+                }
             }
-        }while (valid);
+        }
     }
-
+    
     //O jogo rodara nessa funcao
-    public static void jogo(String[][] mapaJogo,Scanner sc){
+    public static void jogo(String[][] mapaFantasma,String[][] mapaJogo,Scanner sc){
         //Todas funcoes do jogo deve ser colocada aqui
         //Decisao do personagem
         String personagem = escolhaDePersonagem(sc);
@@ -187,6 +224,6 @@ public class AsAventurasDeCodeECoda {
         //listar mapa para o usuario
         listarMapaJogo(mapaJogo);
         //movimentacao do jogador
-        acaoDeMovimentar(mapaJogo,sc);
+        acaoDeMovimentar(mapaJogo,mapaFantasma,sc);
     }
 }
